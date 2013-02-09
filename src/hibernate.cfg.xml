@@ -9,8 +9,8 @@
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://localhost/music_library</property>
-        <property name="connection.username">daniel</property>
-        <property name="connection.password">darkmatter</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">sesame</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
 
         <!-- Echo all executed SQL to stdout -->
