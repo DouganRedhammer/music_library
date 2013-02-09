@@ -29,6 +29,11 @@ public class Track
     {
         this.name = name;
     }
+
+    public Track(Composer composer, String name) {
+        this.composer = composer;
+        this.name = name;
+    }
     
     @Id
     @GeneratedValue
@@ -63,24 +68,51 @@ public class Track
         session.close();
         return track;
     }
-        
+          
     public static void load()
     {
         Session session = HibernateContext.getSession();
         
-        Composer rogers = Composer.find("yo");
+        //Create some Smashing Pumpkins track and link it to both albums
+        Composer billy =  new Composer("Billy Corgan");
+        Track perfect = new Track(billy,"Perfect");
+        Album adore = Album.find("Adore");
+        Album apples = Album.find("Rotten Apples");
         
-        Track java = new Track("Java sucks");
-        java.setComposer(rogers);
+        perfect.getAlbum().add(adore);
+        perfect.getAlbum().add(apples);
+       
+        //Add some STP tracks
+        Composer robert = Composer.find("Robert DeLeo");
+        Track creep = new Track(robert,"Creep");
+        Track garden = new Track(robert,"Wicked Garden");
+        Track dead = new Track(robert,"Dead & Bloated");
+        Album core = Album.find("Core");
+        creep.getAlbum().add(core);
+        garden.getAlbum().add(core);
+        dead.getAlbum().add(core);
         
-        Album doe = Album.find("foo");
+        //Create some Nirvana tracks
+        Composer kurt = Composer.find("Kurt Cobain");
+        Track smells = new Track(kurt, "Smells Like Teen Spirit");
+        Track come = new Track(kurt, "Come as You Are");
+        Track polly = new Track(kurt, "Polly");
+        Album nevermind = Album.find("Nevermind");
+        smells.getAlbum().add(nevermind);
+        come.getAlbum().add(nevermind);
+        polly.getAlbum().add(nevermind);
         
-        // Assign tracks to albums.
-        java.getAlbum().add(doe);
-
+        
         Transaction tx = session.beginTransaction();
         {
-            session.save(java);
+            session.save(billy);
+            session.save(perfect);
+            session.save(creep);
+            session.save(garden);
+            session.save(dead);
+            session.save(smells);
+            session.save(come);
+            session.save(polly);
         }
         tx.commit();
         session.close();

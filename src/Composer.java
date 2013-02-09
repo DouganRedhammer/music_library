@@ -68,8 +68,9 @@ public class Composer
         // Load the Student table in a transaction.
         Transaction tx = session.beginTransaction();
         {
-            session.save(new Composer("asdf"));
-
+            
+            session.save(new Composer("Robert DeLeo"));
+            session.save(new Composer("Kurt Cobain"));
         }
         tx.commit();
         session.close();

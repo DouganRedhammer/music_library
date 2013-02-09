@@ -52,8 +52,10 @@ public class Artist
         // Load the Student table in a transaction.
         Transaction tx = session.beginTransaction();
         {
-            session.save(new Album("foo", new Artist("bag")));
+            
+            session.save(new Artist("The Smashing Pumpkins"));
 
+            
         }
         tx.commit();
         session.close();
@@ -61,6 +63,9 @@ public class Artist
         System.out.println("Album table loaded.");
     }
     
-    
+    public void print()
+    {
+        System.out.printf("%d: %s\n", id, name);
+    }
     
 }

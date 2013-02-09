@@ -34,9 +34,11 @@ public class LibraryDemo
                 HibernateContext.createSchema();
             }
             else if (command.equalsIgnoreCase("load")) {
+              Artist.load();
               Album.load();
               Composer.load();
               Track.load();
+              
                
             }
             else if (command.equalsIgnoreCase("add")) {

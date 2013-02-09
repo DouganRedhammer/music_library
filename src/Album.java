@@ -10,9 +10,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.ManyToMany;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.Query;
+import org.hibernate.criterion.Order;
 
 @Entity
 public class Album 
@@ -59,8 +61,12 @@ public class Album
         // Load the Student table in a transaction.
         Transaction tx = session.beginTransaction();
         {
-            session.save(new Album("foo", new Artist("bag")));
-
+            session.save(new Album("Nevermind", new Artist("Nirvana")));
+            session.save(new Album("Core", new Artist("Stone Temple Pilots")));
+            
+            Artist tsp = Artist.find("The Smashing Pumpkins");
+            session.save(new Album("Rotten Apples", tsp));
+            session.save(new Album("Adore", tsp));
         }
         tx.commit();
         session.close();
@@ -81,20 +87,25 @@ public class Album
     }
     
     public static void list()
-    {
+    {  
         Session session = HibernateContext.getSession();
-        Query query = session.createQuery("from Album");
+        Criteria criteria = session.createCriteria(Album.class);
+        criteria.addOrder(Order.asc("name"));
         
-        System.out.println("All Albums:");
-        
-        // Loop over each student.
-        for (Album album : (List<Album>) query.list()) {
-            album.print();
-            
+        List<Album> album = criteria.list();       
+        System.out.println("All Albums:");      
+
+      
+        for (Album albums : album) {
+            Artist artist = albums.getArtist();
+  
+            System.out.println("Artist: " + artist.getName());
+      
+            System.out.println("       Album:  " + albums.getName());
             // Loop over the album's tracks.
-            for (Track track : album.getTrack()) {
-                System.out.printf("    Track: %s\n", track.getName());
-                
+            for (Track track : albums.getTrack()) {
+                System.out.printf("          Track: %s\n", track.getName());
+                System.out.printf("                Composer: %s\n\n", track.getComposer().getName());
             }
         }
         
