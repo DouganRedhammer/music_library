@@ -10,9 +10,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.ManyToMany;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
+
+/*
+ * This class represents the track objects in the database
+ * 
+ * @author Daniel Franklin, Akash Nadha, Pardeep Bajwa
+ * @group 
+ * 
+ */
 
 @Entity
 @Table(name="Track")
@@ -35,21 +45,33 @@ public class Track
         this.name = name;
     }
     
+    /*
+     *  The unique id of the track 
+     */
     @Id
     @GeneratedValue
     @Column(name="code")
     public long getCode() { return code; }
     public void setCode(long code) { this.code = code; }
     
+    /*
+     *  A track may have many composers
+     */
     @ManyToOne
     @JoinColumn(name="composer_id")
     public Composer getComposer() { return composer; }
     public void setComposer(Composer composer) { this.composer = composer; }
     
+    /*
+     *  The name of the track
+     */
     @Column(name="name")
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     
+    /*
+     *  A track may be on many albums
+     */
     @ManyToMany
     @JoinTable(name="Album_Track", 
                joinColumns={@JoinColumn(name="track_id")},
@@ -57,6 +79,9 @@ public class Track
     public List<Album> getAlbum() { return album; }
     public void setAlbum(List<Album> album) { this.album = album; }
     
+    /*
+     *  finds the track specified by the argumnet
+     */
     public static Track find(String name)
     {
         Session session = HibernateContext.getSession();
@@ -68,7 +93,10 @@ public class Track
         session.close();
         return track;
     }
-          
+   
+    /*
+     *  Loads the initial tracks into the database
+     */      
     public static void load()
     {
         Session session = HibernateContext.getSession();
@@ -117,8 +145,28 @@ public class Track
         tx.commit();
         session.close();
         
-        System.out.println("Class table loaded.");
+        System.out.println("Track table loaded.");
     }
     
     
+    /*
+     *  Lists all the tracks to the screen
+     */ 
+    public static void list()
+    {  
+        Session session = HibernateContext.getSession();
+        Criteria criteria = session.createCriteria(Track.class);
+        criteria.addOrder(Order.asc("name"));
+        
+        List<Track> trackList = criteria.list();       
+        System.out.println("All tracks in the muisc library:");      
+
+      
+        for (Track track : trackList) 
+        {
+            System.out.println(track.getName());
+        }
+        
+        session.close();
+    }
 }

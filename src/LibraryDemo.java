@@ -1,12 +1,16 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class LibraryDemo 
 {
     private static final String HELP_MESSAGE =
-        "*** Commands: create, load, find <n>, add, delete, teachers, quit\n" +
-        "***           students, classes";
+        "*** Commands: create, load, artists, composers, albums\n" +
+        "***           detailed artists, detailed albums , album <name>\n"+
+        "***           artist <name>, quit";
     
     public static void main(String args[]) 
     {
@@ -41,14 +45,47 @@ public class LibraryDemo
               
                
             }
-            else if (command.equalsIgnoreCase("add")) {
-                //Student.add();
+            else if (command.equalsIgnoreCase("artists")) {
+                Artist.list();
             }
-            else if (command.equalsIgnoreCase("delete")) {
-                //Student.delete();
+            else if (command.equalsIgnoreCase("tracks")) {
+                Track.list();
+            }
+            else if (command.equalsIgnoreCase("composers")) {
+                Composer.list();
             }
             else if (command.equalsIgnoreCase("albums")) {
                 Album.list();
+            }
+            else if (command.equalsIgnoreCase("detailed albums")) {
+                Album.albumDetails();
+            }
+            else if (command.equalsIgnoreCase("detailed artists")) {
+                Artist.artistDetails();
+            }
+            else if (parts[0].equalsIgnoreCase("album") && (parts.length >= 2)) 
+            {
+                StringBuilder albumName = new StringBuilder();
+                for(int i = 1; i<parts.length; i++)
+                {
+                    albumName.append(parts[i]);
+                    albumName.append(" ");
+                }
+            
+                Album.albumDetails(albumName.toString());
+            }
+            else if (parts[0].equalsIgnoreCase("artist") && (parts.length >= 2)) 
+            {
+                
+                StringBuilder artistName = new StringBuilder();
+                for(int i = 1; i<parts.length; i++)
+                {
+                    artistName.append(parts[i]);
+                    artistName.append(" ");
+                }
+ 
+                
+                Artist.artistDetails(artistName.toString());
             }
             else if (!command.equalsIgnoreCase("quit")) {
                 System.out.println(HELP_MESSAGE);
